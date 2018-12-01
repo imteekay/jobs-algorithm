@@ -24,4 +24,8 @@
 
     (is
      (prioritize [])
-     [])))
+     [])
+
+    (is
+     (prioritize [{:id "f26e890b-df8e-422e-a39c-7762aa0bac36" :type "rewards-question" :urgent false}])
+     [{:id "f26e890b-df8e-422e-a39c-7762aa0bac36" :type "rewards-question" :urgent false}])))
