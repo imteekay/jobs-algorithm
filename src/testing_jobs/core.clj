@@ -47,16 +47,18 @@
 ;; -- end of examples of function use --
 
 ;; -- sorting by job type --
-(defn agent-has-job-type-as-primary-skillset?
+(defn agent-has-job-type-as-primary-skillset
   [job-type agent]
-  (if (some #{job-type} (:primary_skillset agent)) 0 1))
+  (if (some #{job-type} (:primary_skillset agent))
+    0
+    1))
 
 (defn add-contains-primary-skillset
   [job-type agent]
   (assoc
    agent
    :contains-primary-skillset?
-   (agent-has-job-type-as-primary-skillset? job-type agent)))
+   (agent-has-job-type-as-primary-skillset job-type agent)))
 
 (defn remove-contains-primary-skillset
   [agent]
@@ -74,6 +76,8 @@
   (-> agents
       (filter-by-skillset job)
       (sort-agents-by-primary-skillset job)))
+
+;;; -------------------
 
 (defn agents-ids
   [assigned-jobs]
