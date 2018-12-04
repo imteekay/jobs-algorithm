@@ -17,6 +17,7 @@
     :secondary_skillset ["bills-questions"]}])
 ;; -- end of jobs and agents definition --
 
+
 ;; -- sorting by urgency --
 (defn prioritize
   [jobs]
@@ -25,10 +26,8 @@
 (prioritize jobs)
 ;; -- end of sorting by urgency --
 
-;; -- filtering by skillsets --
-(def first-job (first jobs))
-(def second-job (second jobs))
 
+;; -- filtering by skillsets --
 (defn by-skillset
   [job agent]
   (or
@@ -40,11 +39,6 @@
   (filter (partial by-skillset job) agents))
 ;; -- end of filtering by skillsets --
 
-;; -- examples of function use --
-(filter-by-skillset agents first-job)
-(filter-by-skillset agents second-job)
-(filter-by-skillset (conj agents {:id "123" :name "Mr. Nothing" :primary_skillset ["nothing-other"] :secondary_skillset ["nothing"]}) second-job)
-;; -- end of examples of function use --
 
 ;; -- sorting by job type --
 (defn agent-has-job-type-as-primary-skillset
