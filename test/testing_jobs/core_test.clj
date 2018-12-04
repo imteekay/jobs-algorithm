@@ -148,3 +148,30 @@
          :primary_skillset ["rewards-question"]
          :secondary_skillset []
          :contains-primary-skillset? 1})))))
+
+(deftest remove-contains-primary-skillset-test
+  (testing "Remove contains primary skillset"
+    (testing "with agent property"
+      (is
+       (=
+        (remove-contains-primary-skillset {:id "1"
+                                           :name "Son Goku"
+                                           :primary_skillset ["rewards-question"]
+                                           :secondary_skillset []
+                                           :contains-primary-skillset? 0})
+        {:id "1"
+         :name "Son Goku"
+         :primary_skillset ["rewards-question"]
+         :secondary_skillset []})))
+
+    (testing "without agent property"
+      (is
+       (=
+        (remove-contains-primary-skillset {:id "1"
+                                           :name "Son Goku"
+                                           :primary_skillset ["rewards-question"]
+                                           :secondary_skillset []})
+        {:id "1"
+         :name "Son Goku"
+         :primary_skillset ["rewards-question"]
+         :secondary_skillset []})))))
