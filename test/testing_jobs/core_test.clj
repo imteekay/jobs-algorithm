@@ -118,3 +118,33 @@
                                                  :primary_skillset ["bills-questions"]
                                                  :secondary_skillset []})
         1)))))
+
+(deftest add-contains-primary-skillset-test
+  (testing "Add contains primary skillset"
+    (testing "when agent has job type as primary skillset"
+      (is
+       (=
+        (add-contains-primary-skillset "rewards-question"
+                                       {:id "1"
+                                        :name "Son Goku"
+                                        :primary_skillset ["rewards-question"]
+                                        :secondary_skillset []})
+        {:id "1"
+         :name "Son Goku"
+         :primary_skillset ["rewards-question"]
+         :secondary_skillset []
+         :contains-primary-skillset? 0})))
+
+    (testing "when agent has no job type as primary skillset"
+      (is
+       (=
+        (add-contains-primary-skillset "bills-questions"
+                                       {:id "1"
+                                        :name "Son Goku"
+                                        :primary_skillset ["rewards-question"]
+                                        :secondary_skillset []})
+        {:id "1"
+         :name "Son Goku"
+         :primary_skillset ["rewards-question"]
+         :secondary_skillset []
+         :contains-primary-skillset? 1})))))
