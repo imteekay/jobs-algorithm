@@ -175,3 +175,49 @@
          :name "Son Goku"
          :primary_skillset ["rewards-question"]
          :secondary_skillset []})))))
+
+(deftest sort-agents-by-primary-skillset-test
+  (testing "Sort by primary skillset"
+    (is
+     (=
+      (sort-agents-by-primary-skillset [{:id "1"
+                                         :name "Harry Potter"
+                                         :primary_skillset ["bills-question"]
+                                         :secondary_skillset ["rewards-questions"]}
+                                        {:id "2"
+                                         :name "Son Goku"
+                                         :primary_skillset ["rewards-question"]
+                                         :secondary_skillset []}]
+                                       {:id "1"
+                                        :type "rewards-question"
+                                        :urgent false})
+      [{:id "2"
+        :name "Son Goku"
+        :primary_skillset ["rewards-question"]
+        :secondary_skillset []}
+       {:id "1"
+        :name "Harry Potter"
+        :primary_skillset ["bills-question"]
+        :secondary_skillset ["rewards-questions"]}]))
+
+    (is
+     (=
+      (sort-agents-by-primary-skillset [{:id "1"
+                                         :name "Harry Potter"
+                                         :primary_skillset ["bills-question"]
+                                         :secondary_skillset ["rewards-questions"]}
+                                        {:id "2"
+                                         :name "Son Goku"
+                                         :primary_skillset ["rewards-question"]
+                                         :secondary_skillset []}]
+                                       {:id "1"
+                                        :type "other-question"
+                                        :urgent false})
+      [{:id "1"
+        :name "Harry Potter"
+        :primary_skillset ["bills-question"]
+        :secondary_skillset ["rewards-questions"]}
+       {:id "2"
+        :name "Son Goku"
+        :primary_skillset ["rewards-question"]
+        :secondary_skillset []}]))))
