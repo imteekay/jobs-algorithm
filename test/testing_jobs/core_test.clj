@@ -221,3 +221,31 @@
         :name "Son Goku"
         :primary_skillset ["rewards-question"]
         :secondary_skillset []}]))))
+
+(deftest agents-to-be-assigned-test
+  (testing "Get all agents who can be assigned"
+    (is
+     (=
+      (agents-to-be-assigned [{:id "1"
+                               :name "Harry Potter"
+                               :primary_skillset ["bills-question"]
+                               :secondary_skillset ["rewards-question"]}
+                              {:id "2"
+                               :name "Son Goku"
+                               :primary_skillset ["rewards-question"]
+                               :secondary_skillset []}
+                              {:id "3"
+                               :name "Ruffy"
+                               :primary_skillset ["bills-question"]
+                               :secondary_skillset ["other-stuff"]}]
+                             {:id "1"
+                              :type "rewards-question"
+                              :urgent false})
+      [{:id "2"
+        :name "Son Goku"
+        :primary_skillset ["rewards-question"]
+        :secondary_skillset []}
+       {:id "1"
+        :name "Harry Potter"
+        :primary_skillset ["bills-question"]
+        :secondary_skillset ["rewards-question"]}]))))
