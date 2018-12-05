@@ -249,3 +249,36 @@
         :name "Harry Potter"
         :primary_skillset ["bills-question"]
         :secondary_skillset ["rewards-question"]}]))))
+
+(deftest agents-ids-test
+  (testing "Get all ids from assigned agents"
+    (let [job {:id "1" :type "rewards-question" :urgent false}
+          agent {:id "1"
+                 :name "Harry Potter"
+                 :primary_skillset ["bills-question"]
+                 :secondary_skillset ["rewards-question"]}]
+      (is
+       (=
+        (agents-ids [{:job_assigned {:job_id (:id job)
+                                     :agent_id (:id agent)}}])
+        ["1"])))
+
+    (let [assigned-agents [{:job_assigned {:job_id (:id {:id "1" :type "rewards-question" :urgent false})
+                                           :agent_id (:id {:id "1"
+                                                           :name "Harry Potter"
+                                                           :primary_skillset ["bills-question"]
+                                                           :secondary_skillset ["rewards-question"]})}}
+                           {:job_assigned {:job_id (:id {:id "2" :type "rewards-question" :urgent false})
+                                           :agent_id (:id {:id "2"
+                                                           :name "Son Goku"
+                                                           :primary_skillset ["rewards-question"]
+                                                           :secondary_skillset []})}}]]
+      (is
+       (=
+        (agents-ids assigned-agents)
+        ["1" "2"])))
+    
+    (is
+     (=
+      (agents-ids [])
+      []))))

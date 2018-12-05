@@ -75,9 +75,8 @@
 
 (defn make-agent-job-assignment
   [job agent]
-  {:job_assigned
-   {:job_id (:id job)
-    :agent_id (:id agent)}})
+  {:job_assigned {:job_id (:id job)
+                  :agent_id (:id agent)}})
 
 (defn assignments
   [assigned-jobs job new-assignment]
