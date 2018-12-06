@@ -345,3 +345,19 @@
                   :primary_skillset ["rewards-question"]
                   :secondary_skillset []})
       true))))
+
+
+(deftest make-agent-job-assignment-test
+  (testing "Receive an agent and a job and make an assignment"
+    (is
+     (=
+      (make-agent-job-assignment {:id "1" :type "rewards-question" :urgent false}
+                                 {:id "1"
+                                  :name "Harry Potter"
+                                  :primary_skillset ["bills-question"]
+                                  :secondary_skillset ["rewards-question"]})
+      {:job_assigned {:job_id (:id {:id "1" :type "rewards-question" :urgent false})
+                      :agent_id (:id {:id "1"
+                                      :name "Harry Potter"
+                                      :primary_skillset ["bills-question"]
+                                      :secondary_skillset ["rewards-question"]})}}))))
