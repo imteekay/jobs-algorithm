@@ -53,21 +53,17 @@
 
 ;;; -------------------
 
-(defn agents-ids
+(defn working-agents-ids
   [assigned-jobs]
   (map
    #(get-in % [:job_assigned :agent_id])
    assigned-jobs))
 
-(defn find-agent-id?
+(defn assigned?
   [assigned-jobs agent]
   (some
    #(= (:id agent) %)
-   (agents-ids assigned-jobs)))
-
-(defn assigned?
-  [assigned-jobs agent]
-  (find-agent-id? assigned-jobs agent))
+   (working-agents-ids assigned-jobs)))
 
 (defn not-assigned?
   [assigned-jobs agent]
