@@ -75,14 +75,14 @@
                   :agent_id (:id agent)}})
 
 (defn assignments
-  [assigned-jobs job new-assignment]
-  (if (nil? new-assignment)
+  [assigned-jobs job agent-to-be-assigned]
+  (if (nil? agent-to-be-assigned)
     assigned-jobs
     (conj
      assigned-jobs
      (make-agent-job-assignment
       job
-      new-assignment))))
+      agent-to-be-assigned))))
 
 (defn assign-agent
   [agents job assigned-jobs]

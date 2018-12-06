@@ -361,3 +361,20 @@
                                       :name "Harry Potter"
                                       :primary_skillset ["bills-question"]
                                       :secondary_skillset ["rewards-question"]})}}))))
+
+
+(deftest assignments-test
+  (testing "Assignments of agent and a job"
+           (is
+            (=
+             (assignments []
+                          {:id "1" :type "rewards-question" :urgent false}
+                          {:id "1"
+                           :name "Harry Potter"
+                           :primary_skillset ["bills-question"]
+                           :secondary_skillset ["rewards-question"]})
+             [{:job_assigned {:job_id (:id {:id "1" :type "rewards-question" :urgent false})
+                              :agent_id (:id {:id "1"
+                                              :name "Harry Potter"
+                                              :primary_skillset ["bills-question"]
+                                              :secondary_skillset ["rewards-question"]})}}]))))
