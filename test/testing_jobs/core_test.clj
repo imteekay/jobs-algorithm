@@ -356,25 +356,52 @@
                                   :name "Harry Potter"
                                   :primary_skillset ["bills-question"]
                                   :secondary_skillset ["rewards-question"]})
-      {:job_assigned {:job_id (:id {:id "1" :type "rewards-question" :urgent false})
-                      :agent_id (:id {:id "1"
-                                      :name "Harry Potter"
-                                      :primary_skillset ["bills-question"]
-                                      :secondary_skillset ["rewards-question"]})}}))))
+
+      {:job_assigned {:job_id "1"
+                      :agent_id "1"}}))))
 
 
 (deftest assignments-test
   (testing "Assignments of agent and a job"
-           (is
-            (=
-             (assignments []
-                          {:id "1" :type "rewards-question" :urgent false}
-                          {:id "1"
-                           :name "Harry Potter"
-                           :primary_skillset ["bills-question"]
-                           :secondary_skillset ["rewards-question"]})
-             [{:job_assigned {:job_id (:id {:id "1" :type "rewards-question" :urgent false})
-                              :agent_id (:id {:id "1"
-                                              :name "Harry Potter"
-                                              :primary_skillset ["bills-question"]
-                                              :secondary_skillset ["rewards-question"]})}}]))))
+    (is
+     (=
+      (assignments []
+                   {:id "1" :type "rewards-question" :urgent false}
+                   {:id "1"
+                    :name "Harry Potter"
+                    :primary_skillset ["bills-question"]
+                    :secondary_skillset ["rewards-question"]})
+
+      [{:job_assigned {:job_id "1"
+                       :agent_id "1"}}]))))
+
+
+(deftest assign-agent-test
+  (testing "Assign an agent to a job"
+    (is
+     (=
+      (assign-agent [{:id "1"
+                      :name "Harry Potter"
+                      :primary_skillset ["bills-question"]
+                      :secondary_skillset ["rewards-question"]}]
+                    {:id "1" :type "rewards-question" :urgent false}
+                    [])
+
+      [{:job_assigned {:job_id "1"
+                       :agent_id "1"}}]))
+
+    (is
+     (=
+      (assign-agent [{:id "1"
+                      :name "Harry Potter"
+                      :primary_skillset ["bills-question"]
+                      :secondary_skillset ["rewards-question"]}
+                     {:id "2"
+                      :name "Son Goku"
+                      :primary_skillset ["rewards-question"]
+                      :secondary_skillset []}]
+                    {:id "1" :type "rewards-question" :urgent false}
+                    [])
+
+      [{:job_assigned {:job_id "1"
+                       :agent_id "2"}}]))))
