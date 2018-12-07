@@ -257,27 +257,17 @@
 
 (deftest working-agents-ids-test
   (testing "Get all ids from assigned agents"
-    (let [job {:id "1" :type "rewards-question" :urgent false}
-          agent {:id "1"
-                 :name "Harry Potter"
-                 :primary_skillset ["bills-question"]
-                 :secondary_skillset ["rewards-question"]}]
-      (is
+    (let [assigned-agents [{:job_assigned {:job_id "1"
+                                           :agent_id "1"}}]]
+     (is
        (=
-        (working-agents-ids [{:job_assigned {:job_id (:id job)
-                                     :agent_id (:id agent)}}])
+        (working-agents-ids assigned-agents)
         ["1"])))
 
-    (let [assigned-agents [{:job_assigned {:job_id (:id {:id "1" :type "rewards-question" :urgent false})
-                                           :agent_id (:id {:id "1"
-                                                           :name "Harry Potter"
-                                                           :primary_skillset ["bills-question"]
-                                                           :secondary_skillset ["rewards-question"]})}}
-                           {:job_assigned {:job_id (:id {:id "2" :type "rewards-question" :urgent false})
-                                           :agent_id (:id {:id "2"
-                                                           :name "Son Goku"
-                                                           :primary_skillset ["rewards-question"]
-                                                           :secondary_skillset []})}}]]
+    (let [assigned-agents [{:job_assigned {:job_id "1"
+                                           :agent_id "1"}}
+                           {:job_assigned {:job_id "2"
+                                           :agent_id "2"}}]]
       (is
        (=
         (working-agents-ids assigned-agents)
@@ -293,28 +283,22 @@
   (testing "Find agent id in assigned agents ids list"
     (is
      (=
-      (assigned? [{:job_assigned {:job_id (:id {:id "1" :type "rewards-question" :urgent false})
-                                       :agent_id (:id {:id "1"
-                                                       :name "Harry Potter"
-                                                       :primary_skillset ["bills-question"]
-                                                       :secondary_skillset ["rewards-question"]})}}]
-                      {:id "1"
-                       :name "Harry Potter"
-                       :primary_skillset ["bills-question"]
-                       :secondary_skillset ["rewards-question"]})
+      (assigned? [{:job_assigned {:job_id "1"
+                                  :agent_id "1"}}]
+                 {:id "1"
+                  :name "Harry Potter"
+                  :primary_skillset ["bills-question"]
+                  :secondary_skillset ["rewards-question"]})
       true))
 
     (is
      (=
-      (assigned? [{:job_assigned {:job_id (:id {:id "1" :type "rewards-question" :urgent false})
-                                       :agent_id (:id {:id "1"
-                                                       :name "Harry Potter"
-                                                       :primary_skillset ["bills-question"]
-                                                       :secondary_skillset ["rewards-question"]})}}]
-                      {:id "2"
-                       :name "Son Goku"
-                       :primary_skillset ["rewards-question"]
-                       :secondary_skillset []})
+      (assigned? [{:job_assigned {:job_id "1"
+                                  :agent_id "1"}}]
+                  {:id "2"
+                   :name "Son Goku"
+                   :primary_skillset ["rewards-question"]
+                   :secondary_skillset []})
       nil))))
 
 
@@ -322,28 +306,22 @@
   (testing "Complement of the assigned? function"
     (is
      (=
-      (not-assigned? [{:job_assigned {:job_id (:id {:id "1" :type "rewards-question" :urgent false})
-                                  :agent_id (:id {:id "1"
-                                                  :name "Harry Potter"
-                                                  :primary_skillset ["bills-question"]
-                                                  :secondary_skillset ["rewards-question"]})}}]
-                 {:id "1"
-                  :name "Harry Potter"
-                  :primary_skillset ["bills-question"]
-                  :secondary_skillset ["rewards-question"]})
+      (not-assigned? [{:job_assigned {:job_id "1"
+                                      :agent_id "1"}}]
+                     {:id "1"
+                      :name "Harry Potter"
+                      :primary_skillset ["bills-question"]
+                      :secondary_skillset ["rewards-question"]})
       false))
 
     (is
      (=
-      (not-assigned? [{:job_assigned {:job_id (:id {:id "1" :type "rewards-question" :urgent false})
-                                  :agent_id (:id {:id "1"
-                                                  :name "Harry Potter"
-                                                  :primary_skillset ["bills-question"]
-                                                  :secondary_skillset ["rewards-question"]})}}]
-                 {:id "2"
-                  :name "Son Goku"
-                  :primary_skillset ["rewards-question"]
-                  :secondary_skillset []})
+      (not-assigned? [{:job_assigned {:job_id "1"
+                                      :agent_id "1"}}]
+                     {:id "2"
+                      :name "Son Goku"
+                      :primary_skillset ["rewards-question"]
+                      :secondary_skillset []})
       true))))
 
 
