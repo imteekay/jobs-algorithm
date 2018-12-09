@@ -1,4 +1,5 @@
-(ns testing-jobs.core)
+(ns testing-jobs.core
+  (:use clojure.pprint))
 
 ;; -- sorting by urgency --
 (defn prioritize
@@ -93,20 +94,17 @@
 
 
 ;; ----- Testing sorted agents -----
-(defn run-assignment [agents jobs assigned-jobs]
+(defn run-jobs-assignment
+  [agents jobs assigned-jobs]
   (loop
    [agents         agents
     jobs           (prioritize jobs)
     assigned-jobs  assigned-jobs]
 
     (if (not-empty jobs)
-      (do
-        (println (str "----- " (:type (first jobs)) " -----"))
-        (recur
-         agents
-         (rest jobs)
-         (assign-agent agents (first jobs) assigned-jobs)))
-
+      (recur agents
+             (rest jobs)
+             (assign-agent agents (first jobs) assigned-jobs))
       assigned-jobs)))
 
 ;; -- jobs and agents definition --
@@ -127,5 +125,5 @@
 ;; -- end of jobs and agents definition --
 
 (defn -main [& args]
-  (println (run-assignment agents jobs [])))
+  (pprint (run-jobs-assignment agents jobs [])))
 ;; ----- end of Testing sorted agents -----

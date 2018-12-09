@@ -383,3 +383,23 @@
 
       [{:job_assigned {:job_id "1"
                        :agent_id "2"}}]))))
+
+(deftest run-jobs-assignment-test
+  (testing "Run assignments for all jobs"
+    (let [agents [{:id "1"
+                   :name "Harry Potter"
+                   :primary_skillset ["bills-questions"]
+                   :secondary_skillset []}
+                  {:id "2"
+                   :name "Son Goku"
+                   :primary_skillset ["rewards-question"]
+                   :secondary_skillset ["bills-questions"]}]
+          jobs [{:id "1" :type "rewards-question" :urgent false}
+                {:id "2" :type "bills-questions" :urgent false}
+                {:id "3" :type "bills-questions" :urgent true}]]
+         
+         (is (= (run-jobs-assignment agents jobs [])
+                [{:job_assigned {:job_id "3"
+                                 :agent_id "1"}}
+                 {:job_assigned {:job_id "1"
+                                 :agent_id "2"}}])))))
