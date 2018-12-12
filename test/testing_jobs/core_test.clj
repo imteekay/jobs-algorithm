@@ -300,6 +300,40 @@
                             :agent_id "1"}}]))))
 
 
+(deftest no-type-skillset-match?-test
+  (testing "Returns true if agent and job has no type-skillset match"
+    (is (= (no-type-skillset-match? [{:id "4" :type "palestrinha" :urgent false}]
+                                    {:id "3"
+                                     :name "Maurilio"
+                                     :primary_skillset ["palestrinha"]
+                                     :secondary_skillset ["bills-questions"]})
+           false))
+    
+    (is (= (no-type-skillset-match? [{:id "4" :type "palestrinha" :urgent false}]
+                                    {:id "3"
+                                     :name "Maurilio"
+                                     :primary_skillset ["show"]
+                                     :secondary_skillset ["bills-questions"]})
+           true))))
+
+
+(deftest agents-without-available-jobs-as-primary-skillset-test
+  (testing "Get only agents that does not have a primary skillset matched with the available jobs types"
+    (is (= (agents-without-available-jobs-as-primary-skillset [{:id "4" :type "palestrinha" :urgent false}]
+                                                              [{:id "1"
+                                                                :name "Harry Potter"
+                                                                :primary_skillset ["bills-questions"]
+                                                                :secondary_skillset []}
+                                                               {:id "3"
+                                                                :name "Maurilio"
+                                                                :primary_skillset ["palestrinha"]
+                                                                :secondary_skillset ["bills-questions"]}])
+           [{:id "1"
+             :name "Harry Potter"
+             :primary_skillset ["bills-questions"]
+             :secondary_skillset []}]))))
+
+
 (deftest assign-agent-test
   (testing "Assign an agent to a job"
     (is (= (assign-agent [{:id "1"
@@ -307,7 +341,11 @@
                            :primary_skillset ["bills-question"]
                            :secondary_skillset ["rewards-question"]}]
                          {:id "1" :type "rewards-question" :urgent false}
-                         [])
+                         []
+                         [{:id "1"
+                           :name "Harry Potter"
+                           :primary_skillset ["bills-question"]
+                           :secondary_skillset ["rewards-question"]}])
 
            [{:job_assigned {:job_id "1"
                             :agent_id "1"}}]))
@@ -321,7 +359,15 @@
                            :primary_skillset ["rewards-question"]
                            :secondary_skillset []}]
                          {:id "1" :type "rewards-question" :urgent false}
-                         [])
+                         []
+                         [{:id "1"
+                           :name "Harry Potter"
+                           :primary_skillset ["bills-question"]
+                           :secondary_skillset ["rewards-question"]}
+                          {:id "2"
+                           :name "Son Goku"
+                           :primary_skillset ["rewards-question"]
+                           :secondary_skillset []}])
 
            [{:job_assigned {:job_id "1"
                             :agent_id "2"}}]))))
@@ -336,13 +382,20 @@
                   {:id "2"
                    :name "Son Goku"
                    :primary_skillset ["rewards-question"]
+                   :secondary_skillset ["bills-questions"]}
+                  {:id "3"
+                   :name "Maurilio"
+                   :primary_skillset ["palestrinha"]
                    :secondary_skillset ["bills-questions"]}]
           jobs [{:id "1" :type "rewards-question" :urgent false}
                 {:id "2" :type "bills-questions" :urgent false}
-                {:id "3" :type "bills-questions" :urgent true}]]
+                {:id "3" :type "bills-questions" :urgent true}
+                {:id "4" :type "palestrinha" :urgent false}]]
 
       (is (= (run-jobs-assignment agents jobs [])
              [{:job_assigned {:job_id "3"
                               :agent_id "1"}}
               {:job_assigned {:job_id "1"
-                              :agent_id "2"}}])))))
+                              :agent_id "2"}}
+              {:job_assigned {:job_id "4"
+                              :agent_id "3"}}])))))

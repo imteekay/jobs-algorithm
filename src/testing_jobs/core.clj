@@ -15,6 +15,7 @@
    (some #(= (:type job) %) (:primary_skillset agent))
    (some #(= (:type job) %) (:secondary_skillset agent))))
 
+
 (defn filter-by-skillset
   [agents job]
   (filter (partial by-skillset job) agents))
@@ -28,6 +29,7 @@
     0
     1))
 
+
 (defn add-contains-primary-skillset
   [job-type agent]
   (assoc
@@ -35,9 +37,11 @@
    :contains-primary-skillset?
    (agent-has-job-type-as-primary-skillset job-type agent)))
 
+
 (defn remove-contains-primary-skillset
   [agent]
   (dissoc agent :contains-primary-skillset?))
+
 
 (defn sort-agents-by-primary-skillset
   [agents job]
@@ -45,6 +49,7 @@
        (map (partial add-contains-primary-skillset (:type job)))
        (sort-by :contains-primary-skillset?)
        (map remove-contains-primary-skillset)))
+
 
 (defn agents-to-be-assigned
   [agents job]
@@ -60,20 +65,39 @@
    #(get-in % [:job_assigned :agent_id])
    assigned-jobs))
 
+
 (defn assigned?
   [assigned-jobs agent]
   (some
    #(= (:id agent) %)
    (working-agents-ids assigned-jobs)))
 
+
 (defn not-assigned?
   [assigned-jobs agent]
   ((complement assigned?) assigned-jobs agent))
+
 
 (defn make-agent-job-assignment
   [job agent]
   {:job_assigned {:job_id (:id job)
                   :agent_id (:id agent)}})
+
+
+(defn no-type-skillset-match?
+  [available-jobs agent]
+  (not
+   (some
+    #(= (first (:primary_skillset agent)) (:type %))
+    available-jobs)))
+
+
+(defn agents-without-available-jobs-as-primary-skillset
+  [available-jobs agents]
+  (filter
+   (partial no-type-skillset-match? available-jobs)
+   agents))
+
 
 (defn assignments
   [assigned-jobs job agent-to-be-assigned]
@@ -85,10 +109,12 @@
       job
       agent-to-be-assigned))))
 
+
 (defn assign-agent
-  [agents job assigned-jobs]
+  [agents job assigned-jobs available-jobs]
   (->> (agents-to-be-assigned agents job)
        (filter (partial not-assigned? assigned-jobs))
+       ;(agents-without-available-jobs-as-primary-skillset available-jobs)
        (first)
        (assignments assigned-jobs job)))
 
@@ -104,7 +130,7 @@
     (if (not-empty jobs)
       (recur agents
              (rest jobs)
-             (assign-agent agents (first jobs) assigned-jobs))
+             (assign-agent agents (first jobs) assigned-jobs (rest jobs)))
       assigned-jobs)))
 
 ;; -- jobs and agents definition --
